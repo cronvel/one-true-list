@@ -1,0 +1,46 @@
+{
+  "name": "one-true-list",
+  "version": "0.0.0",
+  "description": "A powerful todo list manager" ,
+  "main": "lib/package.js",
+  "directories": {
+    "test": "test"
+  },
+  "engines": {
+    "node": ">=8.10.0"
+  },
+  "dependencies": {
+    "error-status": "^1.10.0",
+    "fs-kit": "^0.3.2",
+    "hash-kit": "^0.3.2",
+    "logfella": "^1.2.6",
+    "minimist": "^1.2.0",
+    "seventh": "^0.7.27",
+    "string-kit": "^0.9.9",
+    "terminal-kit": "^1.28.25",
+    "utterminal": "^0.5.35"
+  },
+  "scripts": {
+    "test": "tea-time -R dot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cronvel/one-true-list.git"
+  },
+  "keywords": [
+    "todo",
+    "list"
+  ],
+  "author": "Cédric Ronvel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cronvel/one-true-list/issues"
+  },
+  "copyright": {
+    "title": "One True List",
+    "years": [
+      2019
+    ],
+    "owner": "Cédric Ronvel"
+  }
+}
