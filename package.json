@@ -20,7 +20,7 @@
     "minimist": "^1.2.0",
     "seventh": "^0.7.27",
     "string-kit": "^0.9.9",
-    "terminal-kit": "^1.28.25",
+    "terminal-kit": "^1.28.28",
     "utterminal": "^0.5.35"
   },
   "scripts": {
