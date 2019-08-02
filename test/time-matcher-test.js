@@ -36,27 +36,51 @@ const TimeMatcher = require( '../lib/TimeMatcher.js' ) ;
 
 describe( "TimeMatcher#match()" , () => {
 	
-	it( "exact match" , () => {
-		expect( new TimeMatcher( { month: '8' } ).match( DateTime.fromISO( '2019-08-02' ) ) ).to.be( true ) ;
-		expect( new TimeMatcher( { month: '8' } ).match( DateTime.fromISO( '2001-08-02' ) ) ).to.be( true ) ;
-		expect( new TimeMatcher( { month: '8' } ).match( DateTime.fromISO( '2019-09-02' ) ) ).to.be( false ) ;
-		expect( new TimeMatcher( { month: '8' , day: '1' } ).match( DateTime.fromISO( '2019-08-01' ) ) ).to.be( true ) ;
-	} ) ;
+	function computeMatch( pattern , isoDate ) {
+		return new TimeMatcher( pattern ).match( DateTime.fromISO( isoDate ) ) ;
+	}
 	
-	it( "weekday" , () => {
-		expect( new TimeMatcher( { weekday: '5' } ).match( DateTime.fromISO( '2019-08-01' ) ) ).to.be( false ) ;
-		expect( new TimeMatcher( { weekday: '5' } ).match( DateTime.fromISO( '2019-08-02' ) ) ).to.be( true ) ;
-		expect( new TimeMatcher( { weekday: '4' } ).match( DateTime.fromISO( '2019-08-02' ) ) ).to.be( false ) ;
+	it( "exact match" , () => {
+		expect( computeMatch( { month: '8' } , '2019-08-02' ) ).to.be( true ) ;
+		expect( computeMatch( { month: '8' } , '2001-08-02' ) ).to.be( true ) ;
+		expect( computeMatch( { month: '8' } , '2019-09-02' ) ).to.be( false ) ;
+		expect( computeMatch( { month: '8' , day: '1' } , '2019-08-01' ) ).to.be( true ) ;
 	} ) ;
 	
 	it( "range" , () => {
-		// Range
-		expect( new TimeMatcher( { day: '2-5' } ).match( DateTime.fromISO( '2019-08-01' ) ) ).to.be( false ) ;
-		expect( new TimeMatcher( { day: '2-5' } ).match( DateTime.fromISO( '2019-08-02' ) ) ).to.be( true ) ;
-		expect( new TimeMatcher( { day: '2-5' } ).match( DateTime.fromISO( '2019-08-03' ) ) ).to.be( true ) ;
-		expect( new TimeMatcher( { day: '2-5' } ).match( DateTime.fromISO( '2019-08-04' ) ) ).to.be( true ) ;
-		expect( new TimeMatcher( { day: '2-5' } ).match( DateTime.fromISO( '2019-08-05' ) ) ).to.be( true ) ;
-		expect( new TimeMatcher( { day: '2-5' } ).match( DateTime.fromISO( '2019-08-06' ) ) ).to.be( false ) ;
+		expect( computeMatch( { day: '2-5' } , '2019-08-01' ) ).to.be( false ) ;
+		expect( computeMatch( { day: '2-5' } , '2019-08-02' ) ).to.be( true ) ;
+		expect( computeMatch( { day: '2-5' } , '2019-08-03' ) ).to.be( true ) ;
+		expect( computeMatch( { day: '2-5' } , '2019-08-04' ) ).to.be( true ) ;
+		expect( computeMatch( { day: '2-5' } , '2019-08-05' ) ).to.be( true ) ;
+		expect( computeMatch( { day: '2-5' } , '2019-08-06' ) ).to.be( false ) ;
+	} ) ;
+
+	it( "range last" , () => {
+		expect( computeMatch( { day: '5L-2L' } , '2019-08-01' ) ).to.be( false ) ;
+		expect( computeMatch( { day: '5L-2L' } , '2019-08-03' ) ).to.be( false ) ;
+		expect( computeMatch( { day: '5L-2L' } , '2019-08-26' ) ).to.be( false ) ;
+		expect( computeMatch( { day: '5L-2L' } , '2019-08-27' ) ).to.be( true ) ;
+		expect( computeMatch( { day: '5L-2L' } , '2019-08-28' ) ).to.be( true ) ;
+		expect( computeMatch( { day: '5L-2L' } , '2019-08-30' ) ).to.be( true ) ;
+		expect( computeMatch( { day: '5L-2L' } , '2019-08-31' ) ).to.be( false ) ;
+	} ) ;
+
+	it( "every" , () => {
+		expect( computeMatch( { month: '/3' } , '2019-08-01' ) ).to.be( false ) ;
+		expect( computeMatch( { month: '/3' } , '2019-09-01' ) ).to.be( true ) ;
+		expect( computeMatch( { month: '/3' } , '2019-10-01' ) ).to.be( false ) ;
+
+		expect( computeMatch( { month: '/3+1' } , '2019-08-01' ) ).to.be( false ) ;
+		expect( computeMatch( { month: '/3+1' } , '2019-09-01' ) ).to.be( false ) ;
+		expect( computeMatch( { month: '/3+1' } , '2019-10-01' ) ).to.be( true ) ;
+		expect( computeMatch( { month: '/3+1' } , '2019-11-01' ) ).to.be( false ) ;
+	} ) ;
+
+	it( "weekday" , () => {
+		expect( computeMatch( { weekday: '5' } , '2019-08-01' ) ).to.be( false ) ;
+		expect( computeMatch( { weekday: '5' } , '2019-08-02' ) ).to.be( true ) ;
+		expect( computeMatch( { weekday: '4' } , '2019-08-02' ) ).to.be( false ) ;
 	} ) ;
 } ) ;
 
@@ -111,7 +135,17 @@ describe( "TimeMatcher#next()" , () => {
 	} ) ;
 
 	it( "weekday + day range" , () => {
+		expect( computeNext( { weekday: '1' , day: '1-7' } , '2018-12-10' ) ).to.be.partially.like( { year: 2019 , month: 1 , day: 7 } ) ;
+		expect( computeNext( { weekday: '1' , day: '1-7' } , '2019-05-10' ) ).to.be.partially.like( { year: 2019 , month: 6 , day: 3 } ) ;
+		expect( computeNext( { weekday: '1' , day: '1-7' } , '2019-06-10' ) ).to.be.partially.like( { year: 2019 , month: 7 , day: 1 } ) ;
 		expect( computeNext( { weekday: '1' , day: '1-7' } , '2019-07-30' ) ).to.be.partially.like( { year: 2019 , month: 8 , day: 5 } ) ;
+		expect( computeNext( { weekday: '1' , day: '1-7' } , '2019-07-31' ) ).to.be.partially.like( { year: 2019 , month: 8 , day: 5 } ) ;
+		expect( computeNext( { weekday: '1' , day: '1-7' } , '2019-08-01' ) ).to.be.partially.like( { year: 2019 , month: 9 , day: 2 } ) ;
+
+		expect( computeNext( { weekday: '7' , day: '7L-1L' } , '2019-08-01' ) ).to.be.partially.like( { year: 2019 , month: 8 , day: 25 } ) ;
+		expect( computeNext( { weekday: '7' , day: '7L-1L' } , '2019-08-15' ) ).to.be.partially.like( { year: 2019 , month: 8 , day: 25 } ) ;
+		expect( computeNext( { weekday: '7' , day: '7L-1L' } , '2019-09-10' ) ).to.be.partially.like( { year: 2019 , month: 9 , day: 29 } ) ;
+		expect( computeNext( { weekday: '7' , day: '7L-1L' } , '2019-06-10' ) ).to.be.partially.like( { year: 2019 , month: 6 , day: 30 } ) ;
 	} ) ;
 } ) ;
 
