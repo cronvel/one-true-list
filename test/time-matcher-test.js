@@ -82,6 +82,16 @@ describe( "TimeMatcher#match()" , () => {
 		expect( computeMatch( { weekday: '5' } , '2019-08-02' ) ).to.be( true ) ;
 		expect( computeMatch( { weekday: '4' } , '2019-08-02' ) ).to.be( false ) ;
 	} ) ;
+
+	it.next( "flag S pattern should activate only if at the start of a parent range" , () => {
+		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23' } , '2019-08-02T18:00' ) ).to.be( false ) ;
+		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23' } , '2019-08-02T19:00' ) ).to.be( true ) ;
+		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23' } , '2019-08-03T18:00' ) ).to.be( true ) ;
+	} ) ;
+	
+	it( "flag E pattern should activate only if at the end of a parent range" ) ;
+	it( "flag M pattern should activate only if in the middle of a parent range (not the start and not the end)" ) ;
+	it( "flag U (unique) pattern should activate only if the parent is not a range" ) ;
 } ) ;
 
 
