@@ -83,10 +83,10 @@ describe( "TimeMatcher#match()" , () => {
 		expect( computeMatch( { weekday: '4' } , '2019-08-02' ) ).to.be( false ) ;
 	} ) ;
 
-	it.next( "flag S pattern should activate only if at the start of a parent range" , () => {
-		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23' } , '2019-08-02T18:00' ) ).to.be( false ) ;
-		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23' } , '2019-08-02T19:00' ) ).to.be( true ) ;
-		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23' } , '2019-08-03T18:00' ) ).to.be( true ) ;
+	it( "flag S pattern should activate only if at the start of a parent range" , () => {
+		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23,[E]*' } , '2019-08-02T18:00' ) ).to.be( false ) ;
+		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23,[UME]*' } , '2019-08-02T19:00' ) ).to.be( true ) ;
+		expect( computeMatch( { weekday: '5-7' , hour: '[S]19-23,[UME]*' } , '2019-08-03T18:00' ) ).to.be( true ) ;
 	} ) ;
 	
 	it( "flag E pattern should activate only if at the end of a parent range" ) ;
@@ -157,5 +157,12 @@ describe( "TimeMatcher#next()" , () => {
 		expect( computeNext( { weekday: '7' , day: '7L-1L' } , '2019-09-10' ) ).to.be.partially.like( { year: 2019 , month: 9 , day: 29 } ) ;
 		expect( computeNext( { weekday: '7' , day: '7L-1L' } , '2019-06-10' ) ).to.be.partially.like( { year: 2019 , month: 6 , day: 30 } ) ;
 	} ) ;
+
+	it( "hour and minute" , () => {
+		expect( computeNext( { hour: '15-16' } , '2018-12-10T11:00' ) ).to.be.partially.like( { year: 2018 , month: 12 , day: 10 , hour: 15 } ) ;
+		expect( computeNext( { minute: '15-16' } , '2018-12-10T11:00' ) ).to.be.partially.like( { year: 2018 , month: 12 , day: 10 , hour: 11 , minute: 15 } ) ;
+	} ) ;
+	
+	it( ".next() + flags" ) ;
 } ) ;
 
