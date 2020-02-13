@@ -1,6 +1,6 @@
 {
   "name": "one-true-list",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A powerful todo list manager",
   "main": "lib/package.js",
   "bin": {
@@ -21,7 +21,7 @@
     "minimist": "^1.2.0",
     "seventh": "^0.7.31",
     "string-kit": "^0.11.6",
-    "terminal-kit": "^1.33.1",
+    "terminal-kit": "^1.33.2",
     "utterminal": "^0.5.42"
   },
   "scripts": {
