@@ -1,6 +1,6 @@
 {
   "name": "one-true-list",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "A powerful todo list manager",
   "main": "lib/package.js",
   "bin": {
