@@ -1,6 +1,6 @@
 {
   "name": "one-true-list",
-  "version": "0.2.18",
+  "version": "0.2.19",
   "description": "A powerful todo list manager",
   "main": "lib/package.js",
   "bin": {
@@ -14,13 +14,13 @@
   },
   "dependencies": {
     "error-status": "^1.10.0",
-    "fs-kit": "^0.5.1",
-    "hash-kit": "^0.3.2",
-    "logfella": "^1.3.7",
-    "luxon": "^1.22.0",
+    "fs-kit": "^0.6.0",
+    "hash-kit": "^0.3.9",
+    "logfella": "^1.3.8",
+    "luxon": "^1.24.1",
     "seventh": "^0.7.35",
-    "string-kit": "^0.11.6",
-    "terminal-kit": "^1.35.1",
+    "string-kit": "^0.11.8",
+    "terminal-kit": "^1.38.0",
     "utterminal": "^0.5.43"
   },
   "scripts": {
